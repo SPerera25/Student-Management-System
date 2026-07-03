@@ -1,67 +1,6 @@
-#include <iostream>
-#include <vector>
-#include <string>
-using namespace std;
-
-class Student {
-public:
-    int id;
-    string name;
-    int age;
-    string course;
-
-};
+#include "Student.h"
 
 vector<Student> students;
-
-void addStudent();
-void viewStudents();
-void searchStudent();
-void deleteStudent();
-void updateStudent();
-int findStudentIndex(int id);
-
-int main() {
-
-    int choice,id;
-
-    while(true){
-        cout << "===== Student Management System =====" << endl;
-        cout << "\n1. Add Student" << endl;
-        cout << "2. View Students" << endl;
-        cout << "3. Search Student" << endl;
-        cout << "4. Delete Student" << endl;
-        cout << "5. Update student" << endl;
-        cout << "6. Exit\n" << endl;
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        switch(choice){
-            case 1:
-                addStudent();
-                break;
-            case 2:
-                viewStudents();
-                break;
-            case 3:
-                searchStudent();
-                break;
-            case 4:
-                deleteStudent();
-                break;
-            case 5:
-                updateStudent();
-                break;
-            case 6:
-                cout << "Exiting..." << endl;
-                return 0;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
-        }
-    }
-
-    return 0;
-}
 
 void addStudent() {
 
@@ -123,8 +62,11 @@ void addStudent() {
     newStudent.course=course;
 
     students.push_back(newStudent);
+    saveToFile();
+
     cout << "Student added successfully!" << endl;
     cout << endl;
+
 }
 
 void viewStudents(){
@@ -143,6 +85,7 @@ void viewStudents(){
         cout << "------------------------" << endl;
         cout << endl;
     }
+    return;
 }
 
 void searchStudent(){
@@ -179,9 +122,9 @@ void deleteStudent(){
     }
 
     students.erase(students.begin() + i);
+    saveToFile();
+
     cout << "Student deleted successfully." << endl;
-    return;
-    
     
 }
 
@@ -214,13 +157,14 @@ void updateStudent(){
     students[index].age=newAge;
     students[index].name=newName;
     students[index].course=newCourse;
+        
+    saveToFile();
 
     cout << "\n===== Student Updated =====" << endl;
     cout << "ID: " << students[index].id << endl;
     cout << "Name: " << students[index].name << endl;
     cout << "Age: " << students[index].age << endl;
     cout << "course: " << students[index].course << endl;
-    return;
     
 }
 
@@ -233,4 +177,54 @@ int findStudentIndex(int id){
     }
     return -1;
 
+}
+
+void saveToFile(){
+
+    ofstream file("students.txt");
+
+    for(int i=0; i<students.size(); i++){
+        file << students[i].id << "," 
+        << students[i].name << "," 
+        << students[i].age << "," 
+        << students[i].course << endl;
+    }
+
+    file.close();
+}
+
+void loadFromFile(){
+
+    ifstream file("students.txt");
+
+    if (!file) {
+        return;
+    }
+
+    string line;
+
+    while (getline(file, line)){
+
+        stringstream ss(line);
+
+        string idStr, name, ageStr, course;
+
+        getline(ss, idStr, ',');
+        getline(ss, name, ',');
+        getline(ss, ageStr, ',');
+        getline(ss, course, ',');
+        
+        //file stores everything as text. So we convert string into int.
+        int id = stoi(idStr);
+        int age = stoi(ageStr);
+
+        Student s;
+
+        s.id = id;
+        s.name = name;
+        s.age = age;
+        s.course = course;
+
+        students.push_back(s);
+    }
 }
