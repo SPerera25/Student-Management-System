@@ -12,8 +12,9 @@ int main() {
         cout << "2. View Students" << endl;
         cout << "3. Search Student" << endl;
         cout << "4. Delete Student" << endl;
-        cout << "5. Update student" << endl;
-        cout << "6. Exit\n" << endl;
+        cout << "5. Update Student" << endl;
+        cout << "6. Total Students" << endl;
+        cout << "7. Exit\n" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -34,6 +35,9 @@ int main() {
                 updateStudent();
                 break;
             case 6:
+                cout << "Total students: " << students.size() << endl;
+                break;
+            case 7:
                 cout << "Exiting..." << endl;
                 return 0;
             default:

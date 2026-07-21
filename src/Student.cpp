@@ -40,14 +40,11 @@ void addStudent() {
         cin >> age;
         cin.ignore();
 
-        if(age<=0){
+        if(age <= 0){
             cout << "Invalid age!" << endl;
-        }
-        else if(age>0){
-            ageValid = false;
         }
         else{
-            cout << "Invalid age!" << endl;
+            ageValid = false;
         }
     }
 
@@ -78,11 +75,11 @@ void viewStudents(){
     cout << "===== Student List =====" << endl;
 
     for(int i=0; i<students.size(); i++){
-        cout << "ID: " << students[i].id << endl;
-        cout << "Name: " << students[i].name << endl;
-        cout << "Age: " << students[i].age << endl;
-        cout << "Course: " << students[i].course << endl;
-        cout << "------------------------" << endl;
+        cout << "ID:\t" << students[i].id << endl;
+        cout << "Name:\t" << students[i].name << endl;
+        cout << "Age:\t" << students[i].age << endl;
+        cout << "Course:\t" << students[i].course << endl;
+        cout << "========================" << endl;
         cout << endl;
     }
     return;
@@ -101,10 +98,11 @@ void searchStudent(){
     }
     
     cout << "\n===== Student Found =====" << endl;
-    cout << "ID: " << students[i].id << endl;
-    cout << "Name: " << students[i].name << endl;
-    cout << "Age: " << students[i].age << endl;
-    cout << "Course: " << students[i].course << endl;
+    cout << "ID:\t" << students[i].id << endl;
+    cout << "Name:\t" << students[i].name << endl;
+    cout << "Age:\t" << students[i].age << endl;
+    cout << "Course:\t" << students[i].course << endl;
+    cout<< "============================" << endl;
     return;
 
 }
@@ -132,10 +130,15 @@ void updateStudent(){
 
     int newId,newAge;
     string newName,newCourse;
+    bool ageValid = true;
 
     cout << "Enter ID to update: ";
     cin >> newId;
     cin.ignore();
+
+    //"cin.ignore" Use it when a getline() comes after a cin >>.
+    // Don't use it between two getline() calls.
+    // Don't use it between two cin >> statements.
 
     int index = findStudentIndex(newId);
     
@@ -147,9 +150,20 @@ void updateStudent(){
     cout << "New name: ";
     getline(cin,newName);
 
-    cout << "New age: ";
-    cin >> newAge;
-    cin.ignore();
+    
+    while(ageValid){
+
+        cout << "New age: ";
+        cin >> newAge;
+        cin.ignore();
+
+        if(newAge <= 0){
+            cout << "Invalid age!" << endl;
+        }
+        else{
+            ageValid = false;
+        }
+    }
 
     cout << "New course: ";
     getline(cin,newCourse);
@@ -161,10 +175,11 @@ void updateStudent(){
     saveToFile();
 
     cout << "\n===== Student Updated =====" << endl;
-    cout << "ID: " << students[index].id << endl;
-    cout << "Name: " << students[index].name << endl;
-    cout << "Age: " << students[index].age << endl;
-    cout << "course: " << students[index].course << endl;
+    cout << "ID:\t" << students[index].id << endl;
+    cout << "Name:\t" << students[index].name << endl;
+    cout << "Age:\t" << students[index].age << endl;
+    cout << "course:\t" << students[index].course << endl;
+    cout<< "============================" << endl;
     
 }
 
@@ -183,6 +198,11 @@ void saveToFile(){
 
     ofstream file("students.txt");
 
+    if (!file) {
+        cout << "Error opening file!" << endl;
+        return;
+    }
+
     for(int i=0; i<students.size(); i++){
         file << students[i].id << "," 
         << students[i].name << "," 
@@ -195,6 +215,7 @@ void saveToFile(){
 
 void loadFromFile(){
 
+    students.clear();
     ifstream file("students.txt");
 
     if (!file) {
